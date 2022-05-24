@@ -1,9 +1,10 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from django.test import LiveServerTestCase
 import unittest
 import time
 
-class NewVisitorTest(unittest.TestCase):    # (1)
+class NewVisitorTest(LiveServerTestCase):    # (1)
     def setUp(self):    # (3)
         self.browser=webdriver.Firefox()
 
@@ -18,7 +19,8 @@ class NewVisitorTest(unittest.TestCase):    # (1)
     def test_can_start_a_list_and_retrieve_it_later(self):  # (2)
         # Edith has heard about a cool new online to-do app. She goes
         # to check out its homepage
-        self.browser.get('http://localhost:8000')
+      #  self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
         # She notices the page title and header mention to-do lists
         self.assertIn('To-Do',self.browser.title)   # (4)
         header_text = self.browser.find_element_by_tag_name('h1').text
@@ -47,7 +49,7 @@ class NewVisitorTest(unittest.TestCase):    # (1)
 
         # The page updates again，and now shows both items on her list
         self.check_for_row_in_list_table('1:Buy peacock feathers')
-        self.check_for_row_in_list_table('2:use peacock feathers to make a fly')
+        self.check_for_row_in_list_table('2:Use peacock feathers to make a fly')
         # The page updates again,and now shows both items on her listtable = self.browser.find_element_by_id( ' id_list_table ' )
         # Edith wonders whether the site will remember her list. Then she sees
         # that the site has generated a unique URL for her -- there is some
@@ -64,5 +66,3 @@ class NewVisitorTest(unittest.TestCase):    # (1)
     #     self.assertTrue(html.strip().endswith('</html>'))
     #     self.assertTemplateUsed(response,'home.html') #3
 
-if __name__=='__main__':
-    unittest.main(warnings='ignore')
