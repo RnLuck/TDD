@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.urls import path,re_path,include
 from django.conf.urls import url
-from lists import list_views,list_urls
+from lists import views as list_views
+from lists import urls as list_urls
 
 # urlpatterns = [
 #     path('', views.home_page,name='home'),
