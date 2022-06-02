@@ -2,17 +2,19 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException
 from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 import unittest
 import time
 MAX_WAIT=10
 
 
-class NewVisitorTest(LiveServerTestCase):    # (1)
+class NewVisitorTest(StaticLiveServerTestCase):    # (1)
     def setUp(self):    # (3)
         self.browser=webdriver.Firefox()
 
     def tearDown(self): # (3)
         self.browser.quit()
+        #pass
 
     def wait_for_row_in_list_table(self,row_text):
         start_time =time.time()
@@ -21,6 +23,7 @@ class NewVisitorTest(LiveServerTestCase):    # (1)
                 table=self.browser.find_element_by_id('id_list_table')
                 rows=table.find_elements_by_tag_name('tr')
                 self.assertIn(row_text,[row.text for row in rows])
+                
                 return
             except (AssertionError,WebDriverException) as e:
                 if time.time()-start_time>MAX_WAIT:
@@ -111,7 +114,7 @@ class NewVisitorTest(LiveServerTestCase):    # (1)
 
         
         # She notices the input box is nicely centered
-        inputbox = self.browser.find_element_by_id( 'id_new_item' )
+        inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertAlmostEqual(
             inputbox.location['x'] + inputbox.size['width']/ 2, 
             512,
@@ -122,7 +125,8 @@ class NewVisitorTest(LiveServerTestCase):    # (1)
         # centered ther too
         inputbox.send_keys('testing')
         inputbox.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table('id_new_item')
+        self.wait_for_row_in_list_table('1:testing')
+        inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertAlmostEqual(
             inputbox.location['x'] + inputbox.size['width']/ 2, 
             512,
