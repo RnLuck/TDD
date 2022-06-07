@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn server for 150.158.54.49
+
+[Service]
+Restart=on-failure
+User=cai
+WorkingDirectory=/home/cai/sites/150.158.54.49/source
+ExecStart=/home/cai/sites/150.158.54.49/virtualenv/bin/gunicorn \
+ --bind unix:/tmp/150.158.54.49.socket \
+ suplerlists.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
